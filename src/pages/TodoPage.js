@@ -1,38 +1,37 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
-import React, { useState, useContext } from "react";
-import { ApiContextVar} from "../context/ApiContext";
+import React, { useState, } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { inputDB } from "../database/PouchDB";
 import InsertList from "../components/InsertList";
+import {GET_TODOS} from "../utils/components";
 
 const TodoPage = () => {
   const [insertData, setinsertData] = useState("");
-  const dataVal = useContext(ApiContextVar);
+  const queryClient=useQueryClient();
+
+  
+  const {mutate} = useMutation(inputDB,{
+  onSuccess:()=>{
+  queryClient.invalidateQueries(GET_TODOS)
+}    
+  });
   const itemEvent = (e) => {
     setinsertData(e.target.value);
   };
 
   const SubmitItems = async (e) => {
     e.preventDefault();
-    // const user = "user"
-    // if (insertData ==="" || insertData !== user){
-    //   alert("Please Login First")
-    //   setinsertData("");
-    //   return
-    // }
     const toItems = {
 
       task: insertData,
       date: new Date(),
     };
-    const responseID = await inputDB(toItems);
-  
-    toItems.id = responseID?.id;
+    mutate(toItems);
     setinsertData("");
-    const ret = await dataVal?.getToDBFun();
-    console.log("ret======== ", ret);
-  };
-
+  }
+  
+ 
   return (
     <div className=" flex flex-col items-center mt-10">
       <h1 className="text-2xl font-semibold text-center pr-12 py-3 ">TODO</h1>

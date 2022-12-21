@@ -5,10 +5,11 @@
 // import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import { getToData } from "../database/PouchDB";
+import {GET_TODOS} from "../utils/components";
 import InsertListItem from "./InsertListItem";
 
 const InsertList = () => {
-  const { data } = useQuery("key", async () => {
+  const { data } = useQuery(GET_TODOS, async () => {
     const dataList = await getToData();
     return dataList;
   });

@@ -4,10 +4,12 @@
 import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
 import { removeToDB, updateDB } from "../database/PouchDB";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import {GET_TODOS} from "../utils/components";
 
 const InsertListItem = ({ tasks, tasksId, date }) => {
-  // const dataFromContext = useContext(ApiContextVar);
+  const queryClient= useQueryClient();
+
 
   console.log("hey this ",tasksId)
 
@@ -15,6 +17,9 @@ const InsertListItem = ({ tasks, tasksId, date }) => {
 
   const { mutate, isLoading, isSuccess, isError } = useMutation({
     mutationFn: () => removeToDB(tasksId),
+    onSuccess:()=>{
+      queryClient.invalidateQueries(GET_TODOS)
+    }    
   });
   const remove = (event) => {
     event.preventDefault();
@@ -29,10 +34,14 @@ const InsertListItem = ({ tasks, tasksId, date }) => {
     isError: isErr,
   } = useMutation({
     mutationFn: () => updateDB(tasksId, { task:editTodo }),
+    onSuccess:()=>{
+      queryClient.invalidateQueries(GET_TODOS)
+    }    
   });
 
   const edit = (event) => {
     event.preventDefault();
+    setEditTodo("");
     isMutate();
     
   };
