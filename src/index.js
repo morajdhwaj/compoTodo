@@ -9,7 +9,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ApiContext } from "./context/ApiContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-
+ 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const val = new QueryClient;
 // ReactDOM.render(<App/>, document.getElementById("root") )

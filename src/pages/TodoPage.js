@@ -16,6 +16,8 @@ const TodoPage = () => {
   queryClient.invalidateQueries(GET_TODOS)
 }    
   });
+
+  
   const itemEvent = (e) => {
     setinsertData(e.target.value);
   };
